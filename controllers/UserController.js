@@ -1,6 +1,4 @@
 const { User } = require("../models/index")
-
-const { User } = require("../models/index")
 const { compare } = require('../helpers/bcrypt')
 const { signToken } = require("../helpers/jwt")
 
@@ -58,3 +56,5 @@ class UserController {
         })
     }
 }
+
+module.exports = UserController
