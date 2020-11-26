@@ -1,14 +1,13 @@
 const axios = require('axios')
 
-class ControllerMovies {
-    static getPopularMovies(req, res) {
+class MovieController {
+    static getPopularMovies(req, res, next) {
         let imageUrl
         axios({
             url: `https://api.themoviedb.org/3/configuration?api_key=${process.env.TMDB_API_KEY}`
         })
         .then(response => {
             imageUrl = response.data.images.base_url + 'original'
-            console.log(imageUrl);
             return axios({
                     url: `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.TMDB_API_KEY}&language=en-US&page=1`,
                     method: 'GET'
@@ -18,10 +17,11 @@ class ControllerMovies {
             const movies = response.data.results.map(element => {
                 return {
                     movieTitle: element.title,
-                    moviePoster: imageUrl + element.backdrop_path
+                    moviePoster: imageUrl + element.backdrop_path,
+                    movieOverview: element.overview
                 }
             })
-            res.send(movies)
+            res.status(200).json(movies)
         })
         .catch(err => {
             res.send(err)
@@ -29,4 +29,4 @@ class ControllerMovies {
     }
 }
 
-module.exports = ControllerMovies
+module.exports = MovieController
