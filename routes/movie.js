@@ -9,6 +9,7 @@ router.get("/popular", MovieController.getPopularMovies)
 router.get("/", Omdb.omdb)
 router.post("/watchlist", MovieController.addWatchlist)
 router.delete("/watchlist/:id", MovieController.deleteWatchlist)
+router.get("/watchlist", MovieController.list)
 router.get("/similarmovies/:title", RelatedMovies.getSimilarMovies);
 
 module.exports = router;
