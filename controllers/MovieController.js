@@ -2,6 +2,7 @@ const axios = require('axios')
 
 class MovieController {
     static getPopularMovies(req, res, next) {
+        console.log(req.query.title)
         let imageUrl
         axios({
             url: `https://api.themoviedb.org/3/configuration?api_key=${process.env.TMDB_API_KEY}`
