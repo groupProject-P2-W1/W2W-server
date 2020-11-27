@@ -2,15 +2,15 @@ const axios = require("axios");
 
 class Omdb {
     static omdb(req, res, next) {
-        let imdbId = req.params.imdbId // search movie by IMDB ID kalau mau ganti jadi by title 'i=' di url ganti jadi 't='
-        console.log(imdbId);
+        let title = req.query.t // search movie by IMDB ID kalau mau ganti jadi by title 'i=' di url ganti jadi 't='
+        // console.log(imdbId);
         axios({
-            url: `http://www.omdbapi.com/?i=${imdbId}&apikey=${process.env.OMDB}`,
+            url: `http://www.omdbapi.com/?t=${title}&apikey=${process.env.OMDB}`,
             method: 'GET'
         })
         .then(response => {
-            // console.log(response.data);
-            res.json(response.data);
+            console.log(response.data);
+            res.status(200).json(response.data);
         })
         .catch(err => {
             res.json(err)
