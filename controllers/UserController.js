@@ -1,3 +1,4 @@
+const {OAuth2Client} = require('google-auth-library');
 const { User } = require("../models/index")
 const { compare } = require('../helpers/bcrypt')
 const { signToken } = require("../helpers/jwt")
@@ -55,6 +56,43 @@ class UserController {
             next(err)
         })
     }
+    static googleSignIn (req, res, next){
+        let {google_access_token} = req.body
+        const client = new OAuth2Client("1095760211786-55ohuru8hrr94vbll3m4o0k5hgg17fe4.apps.googleusercontent.com")
+        let email;
+        client.verifyIdToken({
+            idToken: google_access_token,
+            audience: "1095760211786-55ohuru8hrr94vbll3m4o0k5hgg17fe4.apps.googleusercontent.com"
+        })
+        .then(ticket => {
+            let payload = ticket.getPayload()
+            email = payload.email
+            return User.findOne({
+            where: {email: payload.email}
+          })
+        .then(user =>{
+            if(user){
+                return user
+            } 
+            else {
+                let newUser = {
+                    email,
+                    password: "12345",
+                }
+                return User.create(newUser)
+            }
+          })
+        })
+        .then(data => {
+            let token = signToken({id: data.id, email: data.email})
+            return res.status(200).json(token)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
+
 }
+
 
 module.exports = UserController
