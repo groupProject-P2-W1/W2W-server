@@ -1,4 +1,5 @@
 const axios = require('axios')
+const { Watchlist } = require('../models/index')
 
 class MovieController {
     static getPopularMovies(req, res, next) {
@@ -25,6 +26,46 @@ class MovieController {
         })
         .catch(err => {
             res.send(err)
+        })
+    }
+
+    static addWatchlist(req, res, next) {
+        const movie = {
+            title: req.body.title,
+            poster: req.body.poster,
+            UserId: req.loggedInUser.id
+        }
+
+        Watchlist.create(movie)
+        .then(data => {
+            res.status(201).json(data)
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                message: 'Internal Server Error'
+            })
+        })
+    }
+
+    static deleteWatchlist(req, res, next) {
+        const movieId = req.params.id
+
+        Watchlist.destroy({
+            where: {
+                id: movieId
+            }
+        })
+        .then(data => {
+            res.status(200).json({
+                message: 'Data deleted'
+            })
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                message: 'Internal Server Error'
+            })
         })
     }
 }
