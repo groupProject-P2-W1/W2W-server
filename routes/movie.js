@@ -6,5 +6,7 @@ const Omdb = require("../controllers/omdbApi")
 router.use(authenticate)
 router.get("/popular", MovieController.getPopularMovies)
 router.get("/", Omdb.omdb)
+router.post("/watchlist", MovieController.addWatchlist)
+router.delete("/watchlist/:id", MovieController.deleteWatchlist)
 
 module.exports = router
